@@ -1,0 +1,1170 @@
+<!doctype html>
+<!--
+  ==========================================================================
+  كريستو / Cristo — منيو رقمي للزباين (فرع كافد، الرياض)
+  Digital customer menu — single self-contained file (HTML + CSS + JS).
+  الهوية مشتقّة من اللوجو: تركواز + أحمر عتيق + كريمي (Retro Levantine).
+  • البيانات مدمجة داخل JavaScript (const MENU) — لا fetch، يعمل من file:// مباشرة.
+  • بدون localStorage / sessionStorage — اللغة في الذاكرة فقط.
+  • ثنائي اللغة AR/EN مع قلب الاتجاه RTL/LTR. الافتراضي: العربية. + وضع داكن تلقائي.
+  ==========================================================================
+-->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+  <meta name="theme-color" content="#689997">
+  <title>كريستو / KRISTO — فرع كافد</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- خطوط: Lalezar (عرض، عربي+لاتيني رترو) · Tajawal (نص عربي) · DM Sans (نص إنجليزي/أرقام) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ======================================================================
+       نظام الألوان (Design Tokens) — الوضع الفاتح افتراضي
+       التركواز أرضية الهوية، الأحمر هو "النبرة" الوحيدة (أسعار + نقطة القسم)،
+       الكريمي للأسطح، والحبر تركوازي-فحمي (نيوترال منحاز لعائلة اللون).
+       ====================================================================== */
+    :root{
+      --ground:#F5E9D2;      /* كريمي دافئ — أرضية الصفحة */
+      --surface:#FFFDF7;     /* كروت */
+      --surface-2:#FBF2DF;   /* سطح ثانوي / placeholder */
+      --ink:#22322F;         /* حبر تركوازي غامق */
+      --muted:#6E827C;       /* نص باهت تركوازي-رمادي */
+      --teal:#2E6E67;        /* تركواز الهوية */
+      --teal-2:#3C8B80;      /* تركواز فاتح */
+      --teal-deep:#234E49;   /* تركواز أعمق (تدرّج الهيرو) */
+      --red:#D6392B;         /* أحمر عتيق (قرص اللوجو) */
+      --red-ink:#BC2E22;     /* أحمر أغمق للنص فوق الكريمي */
+      --mustard:#E0A63C;     /* خردلي رترو — ثانوي */
+      --line:#E7D6B4;        /* حدود كريمية */
+      --cream:#F7EEDC;       /* كريمي فاتح (نص فوق التركواز) */
+
+      --shadow:0 10px 30px rgba(35,78,73,.14);
+      --shadow-sm:0 4px 14px rgba(35,78,73,.10);
+      --bar-h:58px;
+
+      --font-disp:'Lalezar','Tajawal',system-ui,sans-serif;   /* عرض */
+      --font-ar:'Tajawal','Segoe UI',Tahoma,sans-serif;       /* نص عربي */
+      --font-en:'DM Sans','Segoe UI',Arial,sans-serif;        /* نص إنجليزي */
+    }
+
+    /* الوضع الداكن — عبر تفضيل النظام + override يدوي (data-theme) */
+    @media (prefers-color-scheme:dark){
+      :root{
+        --ground:#14201E; --surface:#1D2C29; --surface-2:#243430;
+        --ink:#F3E9D4; --muted:#9DB1AA;
+        --teal:#4FA093; --teal-2:#5FB2A4; --teal-deep:#0F1A18;
+        --red:#F0584A; --red-ink:#F2695C; --mustard:#EAB44E;
+        --line:#2E403B; --cream:#F5EBD6;
+        --shadow:0 12px 34px rgba(0,0,0,.45); --shadow-sm:0 4px 16px rgba(0,0,0,.35);
+      }
+    }
+    :root[data-theme="dark"]{
+      --ground:#14201E; --surface:#1D2C29; --surface-2:#243430;
+      --ink:#F3E9D4; --muted:#9DB1AA;
+      --teal:#4FA093; --teal-2:#5FB2A4; --teal-deep:#0F1A18;
+      --red:#F0584A; --red-ink:#F2695C; --mustard:#EAB44E;
+      --line:#2E403B; --cream:#F5EBD6;
+      --shadow:0 12px 34px rgba(0,0,0,.45); --shadow-sm:0 4px 16px rgba(0,0,0,.35);
+    }
+    :root[data-theme="light"]{
+      --ground:#F5E9D2; --surface:#FFFDF7; --surface-2:#FBF2DF;
+      --ink:#22322F; --muted:#6E827C;
+      --teal:#2E6E67; --teal-2:#3C8B80; --teal-deep:#234E49;
+      --red:#D6392B; --red-ink:#BC2E22; --mustard:#E0A63C;
+      --line:#E7D6B4; --cream:#F7EEDC;
+      --shadow:0 10px 30px rgba(35,78,73,.14); --shadow-sm:0 4px 14px rgba(35,78,73,.10);
+    }
+
+    /* ===================== أساسيات ===================== */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{
+      background:var(--ground);color:var(--ink);
+      font-family:var(--font-ar);line-height:1.5;
+      transition:background .35s ease,color .35s ease;
+      overflow-x:hidden;
+    }
+    body[data-lang="en"]{font-family:var(--font-en)}
+    img{max-width:100%;display:block}
+    button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+    @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+    /* ===================== الهيدر — اللوجو الحقيقي ===================== */
+    /* أرضية الهيرو = نفس صورة اللوجو مبلورة (blur) تملأ العرض كله،
+       فالجوانب تاخد نسيج/ألوان اللوجو نفسها واللوجو الحاد يدوب فيها بلا حواف.
+       #689997 = لون الحافة المستخرج (fallback قبل تحميل الصورة). */
+    .hero{
+      --logo-teal:#689997;
+      position:relative;overflow:hidden;text-align:center;
+      color:var(--cream);
+      background:var(--logo-teal);
+      padding:0 0 18px;
+    }
+    /* حُبيبات ورقية تحاكي ملمس خلفية اللوجو على الأرضية الفلات */
+    .hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:overlay;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .hero > *{position:relative;z-index:1}
+    /* اللوجو الفعلي — تدويب الحواف بقناعين خطيين متعامدين (أفقي على الحاوية، رأسي على الصورة) */
+    .logo-wrap{
+      width:min(100%,540px);margin:0 auto;
+      -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);
+      mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);
+    }
+    .logo-img{
+      display:block;width:100%;
+      -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+      mask-image:linear-gradient(180deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+    }
+    /* عنوان دلالي مخفي بصرياً (اللوجو نفسه هو العنوان المرئي) */
+    .sr-only{
+      position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+      clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;
+    }
+    .branch{margin-top:2px;font-size:15px;color:#F3ECDC;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.18)}
+
+    /* ===================== الشريط الثابت: لغة + أقسام ===================== */
+    .bar{
+      position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;
+      padding:9px 10px;min-height:var(--bar-h);
+      background:color-mix(in srgb, var(--ground) 88%, transparent);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border-bottom:1.5px solid var(--line);
+    }
+    .langseg{display:flex;flex:0 0 auto;border:1.5px solid var(--teal);border-radius:999px;overflow:hidden}
+    .langseg button{padding:6px 13px;font-size:13px;font-weight:700;color:var(--teal);transition:background .2s,color .2s}
+    .langseg button.active{background:var(--teal);color:var(--cream)}
+
+    .chips{display:flex;gap:8px;overflow-x:auto;flex:1 1 auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;padding:2px}
+    .chips::-webkit-scrollbar{display:none}
+    .chip{
+      white-space:nowrap;flex:0 0 auto;padding:7px 15px;border-radius:999px;
+      background:var(--surface);border:1.5px solid var(--line);
+      font-size:13px;font-weight:700;color:var(--ink);
+      transition:background .2s,color .2s,border-color .2s,transform .08s;
+    }
+    .chip:active{transform:scale(.95)}
+    .chip.active{background:var(--teal);color:var(--cream);border-color:var(--teal)}
+
+    /* ===================== الأقسام ===================== */
+    main{max-width:1120px;margin:0 auto;padding-bottom:6px}
+    .section{scroll-margin-top:calc(var(--bar-h) + 6px);padding:22px 15px 6px}
+    /* عنوان القسم: نقطة حمراء (موتيف اللوجو) + الاسم + خط رفيع */
+    .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .sec-head .dot{flex:0 0 auto;width:13px;height:13px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px color-mix(in srgb,var(--red) 22%, transparent)}
+    .sec-head h2{font-family:var(--font-disp);font-weight:400;font-size:27px;color:var(--ink);letter-spacing:.3px}
+    .sec-head .rule{flex:1 1 auto;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--line),transparent)}
+    body[data-lang="en"] .sec-head .rule{background:linear-gradient(270deg,var(--line),transparent)}
+
+    .grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(152px,1fr))}
+
+    /* ===================== الكارت ===================== */
+    .card{
+      background:var(--surface);border:1.5px solid var(--line);border-radius:18px;overflow:hidden;
+      box-shadow:var(--shadow-sm);display:flex;flex-direction:column;
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+    }
+    .card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--teal) 40%,var(--line))}
+    .thumb{position:relative;width:100%;aspect-ratio:1/1;background:var(--surface-2);overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+
+    /* Placeholder رترو: شوكة/سكين تركوازي + CRISTO على كريمي */
+    .ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+        background:
+          radial-gradient(circle at 50% 38%, color-mix(in srgb,var(--teal) 8%, var(--surface-2)), var(--surface-2));}
+    .ph svg{width:40px;height:40px;color:var(--teal);opacity:.5}
+    .ph-mark{font-family:var(--font-en);font-weight:700;font-size:10px;letter-spacing:3px;color:var(--teal);opacity:.55}
+
+    .card .body{padding:11px 13px 13px;display:flex;flex-direction:column;gap:9px;flex:1}
+    .name{font-size:14px;font-weight:700;color:var(--ink);line-height:1.35}
+    /* خط منقّط رترو (تِكِت) يفصل الاسم عن السعر */
+    .price{display:flex;align-items:baseline;gap:5px;margin-top:auto;padding-top:9px;border-top:1.5px dotted var(--line)}
+    .pv{font-family:var(--font-en);font-size:19px;font-weight:700;color:var(--red-ink);font-variant-numeric:tabular-nums;letter-spacing:.2px}
+    .cur{font-size:11px;font-weight:600;color:var(--muted)}
+
+    /* ===================== الفوتر ===================== */
+    footer{
+      margin-top:26px;padding:26px 18px 34px;text-align:center;color:var(--cream);
+      background:radial-gradient(120% 120% at 50% 0%, var(--teal) 0%, var(--teal-deep) 100%);
+      position:relative;overflow:hidden;
+    }
+    footer::before{content:"";position:absolute;inset:0;opacity:.10;mix-blend-mode:overlay;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    footer > *{position:relative;z-index:1}
+    footer .fb{font-family:var(--font-disp);font-size:26px;letter-spacing:1px}
+    footer .fb .en{color:var(--mustard)}
+    footer .yr{font-size:12px;opacity:.75;margin-top:6px;font-family:var(--font-en)}
+
+    /* ===================== شاشات أكبر ===================== */
+    @media(min-width:600px){
+      .grid{grid-template-columns:repeat(auto-fill,minmax(184px,1fr));gap:17px}
+      .section{padding:28px 22px 6px}
+      .sec-head h2{font-size:30px}
+    }
+    @media(min-width:900px){
+      .grid{grid-template-columns:repeat(auto-fill,minmax(208px,1fr))}
+    }
+  </style>
+</head>
+
+<body data-lang="ar">
+
+  <!-- ================= الهيدر — اللوجو الحقيقي ================= -->
+  <header class="hero">
+    <h1 class="sr-only">كريستو / KRISTO — Lebanese Cuisine</h1>
+    <div class="logo-wrap">
+      <img class="logo-img" src="images/logo.jpg" alt="كريستو KRISTO — Lebanese cuisine" decoding="async">
+    </div>
+    <p class="branch" data-ar="فرع كافد" data-en="KAFD Branch">فرع كافد</p>
+  </header>
+
+  <!-- ================= الشريط الثابت ================= -->
+  <div class="bar">
+    <div class="langseg" role="group" aria-label="Language / اللغة">
+      <button data-lang="ar" class="active">AR</button>
+      <button data-lang="en">EN</button>
+    </div>
+    <nav class="chips" id="chips" aria-label="Categories / الأقسام"></nav>
+  </div>
+
+  <!-- ================= المنيو (يُبنى بالـJS) ================= -->
+  <main id="menuRoot"></main>
+
+  <!-- ================= الفوتر ================= -->
+  <footer>
+    <p class="fb">كريستو <span class="en">· KRISTO</span></p>
+    <p class="yr">© <span id="year"></span> — <span data-ar="فرع كافد" data-en="KAFD Branch">فرع كافد</span></p>
+  </footer>
+
+  <script>
+  /* ============================================================
+     بيانات المنيو مدمجة هنا (137 صنف / 10 أقسام) — لا fetch.
+     تُحقن من menu.json أثناء البناء عبر العلامة أدناه.
+     ============================================================ */
+  const MENU = {
+    "restaurant":  {
+                       "name_en":  "KRISTO",
+                       "name_ar":  "كريستو",
+                       "branch_en":  "KAFD Branch",
+                       "branch_ar":  "فرع كافد",
+                       "currency_ar":  "ريال",
+                       "currency_en":  "SAR",
+                       "note_ar":  "الأسعار غير شاملة ضريبة القيمة المضافة 15%",
+                       "note_en":  "Prices exclude 15% VAT"
+                   },
+    "categories":  [
+                       {
+                           "name_ar":  "الفطور",
+                           "name_en":  "Breakfast",
+                           "items":  [
+                                         {
+                                             "ar":  "بيض مسلوق",
+                                             "en":  "Boilled Eggs Piece",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "طبق الفطور اليومي",
+                                             "en":  "Daily Breakfast Dish",
+                                             "price":  15
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "المناقيش",
+                           "name_en":  "Manakish",
+                           "items":  [
+                                         {
+                                             "ar":  "زعتر",
+                                             "en":  "Zaatar",
+                                             "price":  8,
+                                             "image":  "images/zaatar.jpg"
+                                         },
+                                         {
+                                             "ar":  "زعتر مع بندورة وبصل",
+                                             "en":  "Zaatar Tomato Onions",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "كوكتيل",
+                                             "en":  "Cocktail",
+                                             "price":  12,
+                                             "image":  "images/cocktail.jpg"
+                                         },
+                                         {
+                                             "ar":  "جبنة عكاوي",
+                                             "en":  "Cheese Akawi",
+                                             "price":  12,
+                                             "image":  "images/cheese-akawi.jpg"
+                                         },
+                                         {
+                                             "ar":  "حلوم بيستو",
+                                             "en":  "Halloum Pesto",
+                                             "price":  14,
+                                             "image":  "images/halloum-pesto.jpg"
+                                         },
+                                         {
+                                             "ar":  "محمرة",
+                                             "en":  "Mouhamara",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "سبانخ",
+                                             "en":  "Spinach",
+                                             "price":  10,
+                                             "image":  "images/spinach.jpg"
+                                         },
+                                         {
+                                             "ar":  "كشك",
+                                             "en":  "Kechek",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "فيتا",
+                                             "en":  "Fetta",
+                                             "price":  14
+                                         },
+                                         {
+                                             "ar":  "جبنة وزيتون شختورة",
+                                             "en":  "Cheese Olives Chakhtoura",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "مكس أجبان شختورة",
+                                             "en":  "Cheese Mix Chakhtoura",
+                                             "price":  12
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "السندويشات",
+                           "name_en":  "Sandwiches",
+                           "items":  [
+                                         {
+                                             "ar":  "تركي",
+                                             "en":  "Turkey",
+                                             "price":  16,
+                                             "image":  "images/turkey.jpg"
+                                         },
+                                         {
+                                             "ar":  "حلوم",
+                                             "en":  "Haloum",
+                                             "price":  16,
+                                             "image":  "images/haloum-sandwich.jpg"
+                                         },
+                                         {
+                                             "ar":  "لبنة",
+                                             "en":  "Labneh",
+                                             "price":  16,
+                                             "image":  "images/labneh-sandwich.jpg"
+                                         },
+                                         {
+                                             "ar":  "دجاج",
+                                             "en":  "Chicken",
+                                             "price":  18
+                                         },
+                                         {
+                                             "ar":  "مكس أجبان",
+                                             "en":  "Mix Cheese",
+                                             "price":  16
+                                         },
+                                         {
+                                             "ar":  "فيتا",
+                                             "en":  "Feta",
+                                             "price":  16
+                                         },
+                                         {
+                                             "ar":  "تونة",
+                                             "en":  "Tuna",
+                                             "price":  16,
+                                             "image":  "images/tuna-sandwich.jpg"
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "المقبلات",
+                           "name_en":  "Appetizers",
+                           "items":  [
+                                         {
+                                             "ar":  "حمص",
+                                             "en":  "Homos",
+                                             "price":  12,
+                                             "image":  "images/homos.jpg"
+                                         },
+                                         {
+                                             "ar":  "حمص بيستو",
+                                             "en":  "Homos Pesto",
+                                             "price":  16,
+                                             "image":  "images/homos-pesto.jpg"
+                                         },
+                                         {
+                                             "ar":  "متبل",
+                                             "en":  "Moutabal",
+                                             "price":  12,
+                                             "image":  "images/moutabal.jpg"
+                                         },
+                                         {
+                                             "ar":  "متبل شمندر",
+                                             "en":  "Moutabal Beetroot",
+                                             "price":  16,
+                                             "image":  "images/moutabal-beetroot.jpg"
+                                         },
+                                         {
+                                             "ar":  "ورق عنب",
+                                             "en":  "Waraa Inab",
+                                             "price":  12,
+                                             "image":  "images/waraa-inab.jpg"
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "السلطات",
+                           "name_en":  "Salads",
+                           "items":  [
+                                         {
+                                             "ar":  "فتوش",
+                                             "en":  "Fattouch",
+                                             "price":  16,
+                                             "image":  "images/fattouch.jpg"
+                                         },
+                                         {
+                                             "ar":  "تبولة",
+                                             "en":  "Tabouleh",
+                                             "price":  16,
+                                             "image":  "images/tabouleh.jpg"
+                                         },
+                                         {
+                                             "ar":  "جرجير",
+                                             "en":  "Rocca",
+                                             "price":  19,
+                                             "image":  "images/rocca.jpg"
+                                         },
+                                         {
+                                             "ar":  "سيزر",
+                                             "en":  "Caesar",
+                                             "price":  24,
+                                             "image":  "images/caesar.jpg"
+                                         },
+                                         {
+                                             "ar":  "باستا تونة",
+                                             "en":  "Pasta Tuna",
+                                             "price":  22,
+                                             "image":  "images/pasta-tuna.jpg"
+                                         },
+                                         {
+                                             "ar":  "كينوا",
+                                             "en":  "Quinoa",
+                                             "price":  19,
+                                             "image":  "images/quinoa.jpg"
+                                         },
+                                         {
+                                             "ar":  "دجاج وأفوكادو",
+                                             "en":  "Chicken Avocado",
+                                             "price":  24,
+                                             "image":  "images/chicken-avocado.jpg"
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "الحلويات",
+                           "name_en":  "Desserts",
+                           "items":  [
+                                         {
+                                             "ar":  "كيك شوكولاتة",
+                                             "en":  "Chocolate Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك كراميل",
+                                             "en":  "Caramel Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك فستق",
+                                             "en":  "Pistachio Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك مانجو",
+                                             "en":  "Mango Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك إنجليزي",
+                                             "en":  "English Cake",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "سلطة فواكه",
+                                             "en":  "Fruits Salad",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "كراكر فاخر",
+                                             "en":  "Premium Crakers",
+                                             "price":  15
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "الأطباق اليومية",
+                           "name_en":  "Daily Dishes",
+                           "items":  [
+                                         {
+                                             "ar":  "طبق سمك",
+                                             "en":  "Fish Platter",
+                                             "price":  34
+                                         },
+                                         {
+                                             "ar":  "طبق لحم فاخر يومي",
+                                             "en":  "Daily Dish Beef Premium",
+                                             "price":  39
+                                         },
+                                         {
+                                             "ar":  "طبق لحم يومي",
+                                             "en":  "Daily Dish Beef",
+                                             "price":  29
+                                         },
+                                         {
+                                             "ar":  "طبق دجاج يومي",
+                                             "en":  "Daily Dish Chicken",
+                                             "price":  29
+                                         },
+                                         {
+                                             "ar":  "صدر دجاج صحي",
+                                             "en":  "Chicken Breast Healthy",
+                                             "price":  29
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "الأصناف الأخرى",
+                           "name_en":  "Juices & More",
+                           "items":  [
+                                         {
+                                             "ar":  "زبادي يوناني سادة",
+                                             "en":  "Greek Yogurt Plain",
+                                             "price":  6
+                                         },
+                                         {
+                                             "ar":  "زبادي يوناني بالنكهات",
+                                             "en":  "Greek Yogurt Flavor",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "عصير برتقال طازج",
+                                             "en":  "Fresh Orange",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "ليموناضة طازجة",
+                                             "en":  "Fresh Lemonade",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "عصير رمان طازج",
+                                             "en":  "Fresh Pomegrenate",
+                                             "price":  18
+                                         },
+                                         {
+                                             "ar":  "عصير فراولة وموز طازج",
+                                             "en":  "Fresh Strawberry Banana",
+                                             "price":  16
+                                         },
+                                         {
+                                             "ar":  "عصير بطيخ طازج",
+                                             "en":  "Fresh Watermelon",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "عصير أفوكادو طازج",
+                                             "en":  "Fresh Avocado",
+                                             "price":  18
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "المشروبات",
+                           "name_en":  "Beverages",
+                           "items":  [
+                                         {
+                                             "ar":  "مياه",
+                                             "en":  "Water",
+                                             "price":  2
+                                         },
+                                         {
+                                             "ar":  "بيبسي",
+                                             "en":  "Pepsi",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "بيبسي دايت",
+                                             "en":  "Diet Pepsi",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سفن أب",
+                                             "en":  "Seven Up",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سفن أب دايت",
+                                             "en":  "Diet Seven Up",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ميرندا",
+                                             "en":  "Mirinda",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ميرندا ليمون",
+                                             "en":  "Mirinda Lemon",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ماونتن ديو",
+                                             "en":  "Mountain Dew",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "كنزا ميكس",
+                                             "en":  "Kinza Mix",
+                                             "price":  3.5
+                                         },
+                                         {
+                                             "ar":  "بيريه علبة",
+                                             "en":  "Perrier Can",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "بيريه زجاج",
+                                             "en":  "Perrier Glass",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "أكوافينا فوارة",
+                                             "en":  "Sparkling Aquafina",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "كنزا فوارة",
+                                             "en":  "Sparkling Kinza",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج فواكه حمراء",
+                                             "en":  "Ice Tea Red Fruits",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج فواكه حمراء لايت",
+                                             "en":  "Ice Tea Red Fruits Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج استوائي",
+                                             "en":  "Ice Tea Tropical",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج استوائي لايت",
+                                             "en":  "Ice Tea Tropical Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج خوخ",
+                                             "en":  "Ice Tea Peach",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج خوخ لايت",
+                                             "en":  "Ice Tea Peach Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج ليمون",
+                                             "en":  "Ice Tea Lemon",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج ليمون لايت",
+                                             "en":  "Ice Tea Lemon Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "عصير تفاح كرتون",
+                                             "en":  "Carton Apple Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "عصير برتقال كرتون",
+                                             "en":  "Carton Orange Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "عصير مانجو كرتون",
+                                             "en":  "Carton Mango Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "عصير فواكه مشكلة كرتون",
+                                             "en":  "Carton Mix Fruits Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ريد بول",
+                                             "en":  "Red Bull",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "ريد بول لايت",
+                                             "en":  "Red Bull Light",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "بيرة",
+                                             "en":  "Beer",
+                                             "price":  12
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "السناكات",
+                           "name_en":  "Snacks",
+                           "items":  [
+                                         {
+                                             "ar":  "هولز",
+                                             "en":  "Halls",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "علكة",
+                                             "en":  "Gum",
+                                             "price":  2
+                                         },
+                                         {
+                                             "ar":  "كوكيز شوكولاتة أمريكانا كيس",
+                                             "en":  "Americana Choco Cookies Bag",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ميني كرواسون جونيور",
+                                             "en":  "Junior Mini Croissant",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سكيتلز بونبون",
+                                             "en":  "Skitzles Bonbon",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "بسكوف لوتس",
+                                             "en":  "Biscoff Lotus",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "أمادا",
+                                             "en":  "Amada",
+                                             "price":  6
+                                         },
+                                         {
+                                             "ar":  "شانكوس",
+                                             "en":  "Chunkos",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "كراكر",
+                                             "en":  "Cracker",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "كراكر ديمة",
+                                             "en":  "Deemah Craker",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "بريتزلز ميكس",
+                                             "en":  "Pretzels Mix",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "فول سوداني كيس صغير",
+                                             "en":  "Peanuts Small Bag",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "هيرشيز بار كبير",
+                                             "en":  "Hersheys Big Bar",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "ريسيز",
+                                             "en":  "Reeses",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "ديمة هيل",
+                                             "en":  "Deemah Cardamon",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ديمة كليجة",
+                                             "en":  "Deemah Kleija",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "كوكيز زبدة أمريكانا",
+                                             "en":  "Butter Cookies Americana",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "دبكة",
+                                             "en":  "Dabke",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "نيتشر فالي",
+                                             "en":  "Nature Valley",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "موتو ويفر",
+                                             "en":  "Motto Wafer",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "فليك",
+                                             "en":  "Flake",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "جاينت بار",
+                                             "en":  "Giant Bar",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "بسكويت دايجستف بالشوكولاتة",
+                                             "en":  "Digestive Chocolate",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "البركات",
+                                             "en":  "Al Barakat",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "يونيكا دارك",
+                                             "en":  "Unica Dark",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "أوريو ميكس",
+                                             "en":  "Oreo Mix",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "لواكر",
+                                             "en":  "Loacker",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "باونتي ويفر",
+                                             "en":  "Bounty Wafer",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "بولو",
+                                             "en":  "Polo",
+                                             "price":  2
+                                         },
+                                         {
+                                             "ar":  "بسكويت شاي أولكر",
+                                             "en":  "Ulker Tea Biscuit",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "أولكر مالح أزرق",
+                                             "en":  "Ulker Salt Blue",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "تويرل",
+                                             "en":  "Twiril",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "شيريوس",
+                                             "en":  "Cheerios",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "كيريوسلي سينامون",
+                                             "en":  "Curiously Cinamon",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "وافل عبوة واحدة",
+                                             "en":  "1 Pack Wafel",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "شيبس صغير",
+                                             "en":  "Chips Small",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "برينجلز صغير",
+                                             "en":  "Pringles Small",
+                                             "price":  6
+                                         },
+                                         {
+                                             "ar":  "كيت كات",
+                                             "en":  "Kitkat",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سفاري",
+                                             "en":  "Safari",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "جالاكسي",
+                                             "en":  "Galaxy",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "جالاكسي كبير",
+                                             "en":  "Galaxy Big",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "مالتيزرز",
+                                             "en":  "Maltezers",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "توبليرون",
+                                             "en":  "Toblerone",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "تويرل",
+                                             "en":  "Twiril",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "جوديفا",
+                                             "en":  "Godiva",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "باونتي",
+                                             "en":  "Bounty",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "لايون",
+                                             "en":  "Lion",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "ريسيز",
+                                             "en":  "Reeses",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "يونيكا",
+                                             "en":  "Unica",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سنيكرز",
+                                             "en":  "Snickers",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "باونتي ويفر",
+                                             "en":  "Bounty Wafer",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "تويكس توب",
+                                             "en":  "Twix Top",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "تويكس ميكس",
+                                             "en":  "Twix Mix",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "هيرشيز",
+                                             "en":  "Hersheys",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "كيت كات كبير",
+                                             "en":  "Kitkat Big",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "كرنش أزرق كبير",
+                                             "en":  "Crunsh Blue Big",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "ميلكا ميكس كبير",
+                                             "en":  "Milka Big Mix",
+                                             "price":  12
+                                         }
+                                     ]
+                       }
+                   ]
+};
+
+  /* حالة التطبيق — اللغة في الذاكرة فقط (بدون تخزين) */
+  const state = { lang: 'ar' };
+
+  /* Placeholder للأصناف بدون صورة (شوكة/سكين + CRISTO) */
+  const PLACE = ''
+    + '<div class="ph">'
+    +   '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'
+    +     '<path d="M20 12v11M26 12v11M32 12v11"/><path d="M20 23h12"/><path d="M26 23v29"/>'
+    +     '<path d="M48 12c-6 2-9 9-9 17h9z"/><path d="M48 29v23"/>'
+    +   '</svg>'
+    +   '<span class="ph-mark">KRISTO</span>'
+    + '</div>';
+
+  /* تنسيق السعر (يحافظ على الكسر مثل 3.5) */
+  const fmt = p => (Math.round(p * 100) / 100).toString();
+
+  /* بناء كارت صنف */
+  function buildCard(item){
+    const card = document.createElement('article');
+    card.className = 'card';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    if (item.image){
+      const img = document.createElement('img');
+      img.loading = 'lazy'; img.decoding = 'async';
+      img.alt = item.ar + ' / ' + item.en;
+      img.src = item.image;
+      img.onerror = () => { thumb.innerHTML = PLACE; };   // fallback أنيق
+      thumb.appendChild(img);
+    } else {
+      thumb.innerHTML = PLACE;
+    }
+    card.appendChild(thumb);
+
+    const body = document.createElement('div');
+    body.className = 'body';
+
+    const name = document.createElement('div');
+    name.className = 'name';
+    name.dataset.ar = item.ar; name.dataset.en = item.en;
+    name.textContent = item.ar;
+
+    const price = document.createElement('div');
+    price.className = 'price';
+    const pv = document.createElement('span');
+    pv.className = 'pv'; pv.textContent = fmt(item.price);
+    const cur = document.createElement('span');
+    cur.className = 'cur'; cur.dataset.ar = 'ريال'; cur.dataset.en = 'SAR'; cur.textContent = 'ريال';
+    price.appendChild(pv); price.appendChild(cur);
+
+    body.appendChild(name); body.appendChild(price);
+    card.appendChild(body);
+    return card;
+  }
+
+  /* بناء الأقسام + الشرائح */
+  function buildMenu(){
+    const root = document.getElementById('menuRoot');
+    const chips = document.getElementById('chips');
+
+    MENU.categories.forEach((cat, i) => {
+      const secId = 'cat-' + i;
+
+      const chip = document.createElement('button');
+      chip.className = 'chip';
+      chip.dataset.target = secId;
+      chip.dataset.ar = cat.name_ar; chip.dataset.en = cat.name_en;
+      chip.textContent = cat.name_ar;
+      chip.addEventListener('click', () => {
+        document.getElementById(secId).scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+      chips.appendChild(chip);
+
+      const sec = document.createElement('section');
+      sec.className = 'section'; sec.id = secId;
+
+      // ترويسة القسم: نقطة + عنوان + خط
+      const head = document.createElement('div');
+      head.className = 'sec-head';
+      const dot = document.createElement('span'); dot.className = 'dot';
+      const h2 = document.createElement('h2');
+      h2.dataset.ar = cat.name_ar; h2.dataset.en = cat.name_en;
+      h2.textContent = cat.name_ar;
+      const rule = document.createElement('span'); rule.className = 'rule';
+      head.appendChild(dot); head.appendChild(h2); head.appendChild(rule);
+      sec.appendChild(head);
+
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      cat.items.forEach(item => grid.appendChild(buildCard(item)));
+      sec.appendChild(grid);
+
+      root.appendChild(sec);
+    });
+  }
+
+  /* تطبيق اللغة: قلب الاتجاه + تبديل النصوص (data-ar/data-en) */
+  function applyLang(){
+    const lang = state.lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = (lang === 'ar') ? 'rtl' : 'ltr';
+    document.body.dataset.lang = lang;
+    document.querySelectorAll('[data-ar]').forEach(el => {
+      el.textContent = (lang === 'ar') ? el.dataset.ar : el.dataset.en;
+    });
+    document.querySelectorAll('.langseg button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+  }
+  function setLang(lang){ state.lang = lang; applyLang(); }
+
+  /* تمييز القسم النشط أثناء التمرير */
+  function observeSections(){
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    const byId = {};
+    chips.forEach(ch => byId[ch.dataset.target] = ch);
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting){
+          chips.forEach(c => c.classList.remove('active'));
+          const ch = byId[e.target.id];
+          if (ch){ ch.classList.add('active'); ch.scrollIntoView({ block:'nearest', inline:'center', behavior:'smooth' }); }
+        }
+      });
+    }, { rootMargin: '-64px 0px -70% 0px', threshold: 0 });
+    document.querySelectorAll('.section').forEach(s => obs.observe(s));
+  }
+
+  /* ===== التشغيل ===== */
+  buildMenu();
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.querySelectorAll('.langseg button').forEach(b => {
+    b.addEventListener('click', () => setLang(b.dataset.lang));
+  });
+  applyLang();
+  observeSections();
+  </script>
+</body>
+</html>

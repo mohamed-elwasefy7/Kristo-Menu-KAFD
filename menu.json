@@ -1,0 +1,780 @@
+{
+    "restaurant":  {
+                       "name_en":  "KRISTO",
+                       "name_ar":  "كريستو",
+                       "branch_en":  "KAFD Branch",
+                       "branch_ar":  "فرع كافد",
+                       "currency_ar":  "ريال",
+                       "currency_en":  "SAR",
+                       "note_ar":  "الأسعار غير شاملة ضريبة القيمة المضافة 15%",
+                       "note_en":  "Prices exclude 15% VAT"
+                   },
+    "categories":  [
+                       {
+                           "name_ar":  "الفطور",
+                           "name_en":  "Breakfast",
+                           "items":  [
+                                         {
+                                             "ar":  "بيض مسلوق",
+                                             "en":  "Boilled Eggs Piece",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "طبق الفطور اليومي",
+                                             "en":  "Daily Breakfast Dish",
+                                             "price":  15
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "المناقيش",
+                           "name_en":  "Manakish",
+                           "items":  [
+                                         {
+                                             "ar":  "زعتر",
+                                             "en":  "Zaatar",
+                                             "price":  8,
+                                             "image":  "images/zaatar.jpg"
+                                         },
+                                         {
+                                             "ar":  "زعتر مع بندورة وبصل",
+                                             "en":  "Zaatar Tomato Onions",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "كوكتيل",
+                                             "en":  "Cocktail",
+                                             "price":  12,
+                                             "image":  "images/cocktail.jpg"
+                                         },
+                                         {
+                                             "ar":  "جبنة عكاوي",
+                                             "en":  "Cheese Akawi",
+                                             "price":  12,
+                                             "image":  "images/cheese-akawi.jpg"
+                                         },
+                                         {
+                                             "ar":  "حلوم بيستو",
+                                             "en":  "Halloum Pesto",
+                                             "price":  14,
+                                             "image":  "images/halloum-pesto.jpg"
+                                         },
+                                         {
+                                             "ar":  "محمرة",
+                                             "en":  "Mouhamara",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "سبانخ",
+                                             "en":  "Spinach",
+                                             "price":  10,
+                                             "image":  "images/spinach.jpg"
+                                         },
+                                         {
+                                             "ar":  "كشك",
+                                             "en":  "Kechek",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "فيتا",
+                                             "en":  "Fetta",
+                                             "price":  14
+                                         },
+                                         {
+                                             "ar":  "جبنة وزيتون شختورة",
+                                             "en":  "Cheese Olives Chakhtoura",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "مكس أجبان شختورة",
+                                             "en":  "Cheese Mix Chakhtoura",
+                                             "price":  12
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "السندويشات",
+                           "name_en":  "Sandwiches",
+                           "items":  [
+                                         {
+                                             "ar":  "تركي",
+                                             "en":  "Turkey",
+                                             "price":  16,
+                                             "image":  "images/turkey.jpg"
+                                         },
+                                         {
+                                             "ar":  "حلوم",
+                                             "en":  "Haloum",
+                                             "price":  16,
+                                             "image":  "images/haloum-sandwich.jpg"
+                                         },
+                                         {
+                                             "ar":  "لبنة",
+                                             "en":  "Labneh",
+                                             "price":  16,
+                                             "image":  "images/labneh-sandwich.jpg"
+                                         },
+                                         {
+                                             "ar":  "دجاج",
+                                             "en":  "Chicken",
+                                             "price":  18
+                                         },
+                                         {
+                                             "ar":  "مكس أجبان",
+                                             "en":  "Mix Cheese",
+                                             "price":  16
+                                         },
+                                         {
+                                             "ar":  "فيتا",
+                                             "en":  "Feta",
+                                             "price":  16
+                                         },
+                                         {
+                                             "ar":  "تونة",
+                                             "en":  "Tuna",
+                                             "price":  16,
+                                             "image":  "images/tuna-sandwich.jpg"
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "المقبلات",
+                           "name_en":  "Appetizers",
+                           "items":  [
+                                         {
+                                             "ar":  "حمص",
+                                             "en":  "Homos",
+                                             "price":  12,
+                                             "image":  "images/homos.jpg"
+                                         },
+                                         {
+                                             "ar":  "حمص بيستو",
+                                             "en":  "Homos Pesto",
+                                             "price":  16,
+                                             "image":  "images/homos-pesto.jpg"
+                                         },
+                                         {
+                                             "ar":  "متبل",
+                                             "en":  "Moutabal",
+                                             "price":  12,
+                                             "image":  "images/moutabal.jpg"
+                                         },
+                                         {
+                                             "ar":  "متبل شمندر",
+                                             "en":  "Moutabal Beetroot",
+                                             "price":  16,
+                                             "image":  "images/moutabal-beetroot.jpg"
+                                         },
+                                         {
+                                             "ar":  "ورق عنب",
+                                             "en":  "Waraa Inab",
+                                             "price":  12,
+                                             "image":  "images/waraa-inab.jpg"
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "السلطات",
+                           "name_en":  "Salads",
+                           "items":  [
+                                         {
+                                             "ar":  "فتوش",
+                                             "en":  "Fattouch",
+                                             "price":  16,
+                                             "image":  "images/fattouch.jpg"
+                                         },
+                                         {
+                                             "ar":  "تبولة",
+                                             "en":  "Tabouleh",
+                                             "price":  16,
+                                             "image":  "images/tabouleh.jpg"
+                                         },
+                                         {
+                                             "ar":  "جرجير",
+                                             "en":  "Rocca",
+                                             "price":  19,
+                                             "image":  "images/rocca.jpg"
+                                         },
+                                         {
+                                             "ar":  "سيزر",
+                                             "en":  "Caesar",
+                                             "price":  24,
+                                             "image":  "images/caesar.jpg"
+                                         },
+                                         {
+                                             "ar":  "باستا تونة",
+                                             "en":  "Pasta Tuna",
+                                             "price":  22,
+                                             "image":  "images/pasta-tuna.jpg"
+                                         },
+                                         {
+                                             "ar":  "كينوا",
+                                             "en":  "Quinoa",
+                                             "price":  19,
+                                             "image":  "images/quinoa.jpg"
+                                         },
+                                         {
+                                             "ar":  "دجاج وأفوكادو",
+                                             "en":  "Chicken Avocado",
+                                             "price":  24,
+                                             "image":  "images/chicken-avocado.jpg"
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "الحلويات",
+                           "name_en":  "Desserts",
+                           "items":  [
+                                         {
+                                             "ar":  "كيك شوكولاتة",
+                                             "en":  "Chocolate Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك كراميل",
+                                             "en":  "Caramel Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك فستق",
+                                             "en":  "Pistachio Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك مانجو",
+                                             "en":  "Mango Cake",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "كيك إنجليزي",
+                                             "en":  "English Cake",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "سلطة فواكه",
+                                             "en":  "Fruits Salad",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "كراكر فاخر",
+                                             "en":  "Premium Crakers",
+                                             "price":  15
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "الأطباق اليومية",
+                           "name_en":  "Daily Dishes",
+                           "items":  [
+                                         {
+                                             "ar":  "طبق سمك",
+                                             "en":  "Fish Platter",
+                                             "price":  34
+                                         },
+                                         {
+                                             "ar":  "طبق لحم فاخر يومي",
+                                             "en":  "Daily Dish Beef Premium",
+                                             "price":  39
+                                         },
+                                         {
+                                             "ar":  "طبق لحم يومي",
+                                             "en":  "Daily Dish Beef",
+                                             "price":  29
+                                         },
+                                         {
+                                             "ar":  "طبق دجاج يومي",
+                                             "en":  "Daily Dish Chicken",
+                                             "price":  29
+                                         },
+                                         {
+                                             "ar":  "صدر دجاج صحي",
+                                             "en":  "Chicken Breast Healthy",
+                                             "price":  29
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "الأصناف الأخرى",
+                           "name_en":  "Juices & More",
+                           "items":  [
+                                         {
+                                             "ar":  "زبادي يوناني سادة",
+                                             "en":  "Greek Yogurt Plain",
+                                             "price":  6
+                                         },
+                                         {
+                                             "ar":  "زبادي يوناني بالنكهات",
+                                             "en":  "Greek Yogurt Flavor",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "عصير برتقال طازج",
+                                             "en":  "Fresh Orange",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "ليموناضة طازجة",
+                                             "en":  "Fresh Lemonade",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "عصير رمان طازج",
+                                             "en":  "Fresh Pomegrenate",
+                                             "price":  18
+                                         },
+                                         {
+                                             "ar":  "عصير فراولة وموز طازج",
+                                             "en":  "Fresh Strawberry Banana",
+                                             "price":  16
+                                         },
+                                         {
+                                             "ar":  "عصير بطيخ طازج",
+                                             "en":  "Fresh Watermelon",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "عصير أفوكادو طازج",
+                                             "en":  "Fresh Avocado",
+                                             "price":  18
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "المشروبات",
+                           "name_en":  "Beverages",
+                           "items":  [
+                                         {
+                                             "ar":  "مياه",
+                                             "en":  "Water",
+                                             "price":  2
+                                         },
+                                         {
+                                             "ar":  "بيبسي",
+                                             "en":  "Pepsi",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "بيبسي دايت",
+                                             "en":  "Diet Pepsi",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سفن أب",
+                                             "en":  "Seven Up",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سفن أب دايت",
+                                             "en":  "Diet Seven Up",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ميرندا",
+                                             "en":  "Mirinda",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ميرندا ليمون",
+                                             "en":  "Mirinda Lemon",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ماونتن ديو",
+                                             "en":  "Mountain Dew",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "كنزا ميكس",
+                                             "en":  "Kinza Mix",
+                                             "price":  3.5
+                                         },
+                                         {
+                                             "ar":  "بيريه علبة",
+                                             "en":  "Perrier Can",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "بيريه زجاج",
+                                             "en":  "Perrier Glass",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "أكوافينا فوارة",
+                                             "en":  "Sparkling Aquafina",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "كنزا فوارة",
+                                             "en":  "Sparkling Kinza",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج فواكه حمراء",
+                                             "en":  "Ice Tea Red Fruits",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج فواكه حمراء لايت",
+                                             "en":  "Ice Tea Red Fruits Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج استوائي",
+                                             "en":  "Ice Tea Tropical",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج استوائي لايت",
+                                             "en":  "Ice Tea Tropical Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج خوخ",
+                                             "en":  "Ice Tea Peach",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج خوخ لايت",
+                                             "en":  "Ice Tea Peach Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج ليمون",
+                                             "en":  "Ice Tea Lemon",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "شاي مثلج ليمون لايت",
+                                             "en":  "Ice Tea Lemon Light",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "عصير تفاح كرتون",
+                                             "en":  "Carton Apple Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "عصير برتقال كرتون",
+                                             "en":  "Carton Orange Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "عصير مانجو كرتون",
+                                             "en":  "Carton Mango Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "عصير فواكه مشكلة كرتون",
+                                             "en":  "Carton Mix Fruits Juice",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ريد بول",
+                                             "en":  "Red Bull",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "ريد بول لايت",
+                                             "en":  "Red Bull Light",
+                                             "price":  15
+                                         },
+                                         {
+                                             "ar":  "بيرة",
+                                             "en":  "Beer",
+                                             "price":  12
+                                         }
+                                     ]
+                       },
+                       {
+                           "name_ar":  "السناكات",
+                           "name_en":  "Snacks",
+                           "items":  [
+                                         {
+                                             "ar":  "هولز",
+                                             "en":  "Halls",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "علكة",
+                                             "en":  "Gum",
+                                             "price":  2
+                                         },
+                                         {
+                                             "ar":  "كوكيز شوكولاتة أمريكانا كيس",
+                                             "en":  "Americana Choco Cookies Bag",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ميني كرواسون جونيور",
+                                             "en":  "Junior Mini Croissant",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سكيتلز بونبون",
+                                             "en":  "Skitzles Bonbon",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "بسكوف لوتس",
+                                             "en":  "Biscoff Lotus",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "أمادا",
+                                             "en":  "Amada",
+                                             "price":  6
+                                         },
+                                         {
+                                             "ar":  "شانكوس",
+                                             "en":  "Chunkos",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "كراكر",
+                                             "en":  "Cracker",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "كراكر ديمة",
+                                             "en":  "Deemah Craker",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "بريتزلز ميكس",
+                                             "en":  "Pretzels Mix",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "فول سوداني كيس صغير",
+                                             "en":  "Peanuts Small Bag",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "هيرشيز بار كبير",
+                                             "en":  "Hersheys Big Bar",
+                                             "price":  10
+                                         },
+                                         {
+                                             "ar":  "ريسيز",
+                                             "en":  "Reeses",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "ديمة هيل",
+                                             "en":  "Deemah Cardamon",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "ديمة كليجة",
+                                             "en":  "Deemah Kleija",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "كوكيز زبدة أمريكانا",
+                                             "en":  "Butter Cookies Americana",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "دبكة",
+                                             "en":  "Dabke",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "نيتشر فالي",
+                                             "en":  "Nature Valley",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "موتو ويفر",
+                                             "en":  "Motto Wafer",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "فليك",
+                                             "en":  "Flake",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "جاينت بار",
+                                             "en":  "Giant Bar",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "بسكويت دايجستف بالشوكولاتة",
+                                             "en":  "Digestive Chocolate",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "البركات",
+                                             "en":  "Al Barakat",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "يونيكا دارك",
+                                             "en":  "Unica Dark",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "أوريو ميكس",
+                                             "en":  "Oreo Mix",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "لواكر",
+                                             "en":  "Loacker",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "باونتي ويفر",
+                                             "en":  "Bounty Wafer",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "بولو",
+                                             "en":  "Polo",
+                                             "price":  2
+                                         },
+                                         {
+                                             "ar":  "بسكويت شاي أولكر",
+                                             "en":  "Ulker Tea Biscuit",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "أولكر مالح أزرق",
+                                             "en":  "Ulker Salt Blue",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "تويرل",
+                                             "en":  "Twiril",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "شيريوس",
+                                             "en":  "Cheerios",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "كيريوسلي سينامون",
+                                             "en":  "Curiously Cinamon",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "وافل عبوة واحدة",
+                                             "en":  "1 Pack Wafel",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "شيبس صغير",
+                                             "en":  "Chips Small",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "برينجلز صغير",
+                                             "en":  "Pringles Small",
+                                             "price":  6
+                                         },
+                                         {
+                                             "ar":  "كيت كات",
+                                             "en":  "Kitkat",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سفاري",
+                                             "en":  "Safari",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "جالاكسي",
+                                             "en":  "Galaxy",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "جالاكسي كبير",
+                                             "en":  "Galaxy Big",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "مالتيزرز",
+                                             "en":  "Maltezers",
+                                             "price":  5
+                                         },
+                                         {
+                                             "ar":  "توبليرون",
+                                             "en":  "Toblerone",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "تويرل",
+                                             "en":  "Twiril",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "جوديفا",
+                                             "en":  "Godiva",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "باونتي",
+                                             "en":  "Bounty",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "لايون",
+                                             "en":  "Lion",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "ريسيز",
+                                             "en":  "Reeses",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "يونيكا",
+                                             "en":  "Unica",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "سنيكرز",
+                                             "en":  "Snickers",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "باونتي ويفر",
+                                             "en":  "Bounty Wafer",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "تويكس توب",
+                                             "en":  "Twix Top",
+                                             "price":  3
+                                         },
+                                         {
+                                             "ar":  "تويكس ميكس",
+                                             "en":  "Twix Mix",
+                                             "price":  4
+                                         },
+                                         {
+                                             "ar":  "هيرشيز",
+                                             "en":  "Hersheys",
+                                             "price":  8
+                                         },
+                                         {
+                                             "ar":  "كيت كات كبير",
+                                             "en":  "Kitkat Big",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "كرنش أزرق كبير",
+                                             "en":  "Crunsh Blue Big",
+                                             "price":  12
+                                         },
+                                         {
+                                             "ar":  "ميلكا ميكس كبير",
+                                             "en":  "Milka Big Mix",
+                                             "price":  12
+                                         }
+                                     ]
+                       }
+                   ]
+}
