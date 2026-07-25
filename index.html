@@ -181,6 +181,19 @@
     .ph svg{width:40px;height:40px;color:var(--teal);opacity:.5}
     .ph-mark{font-family:var(--font-en);font-weight:700;font-size:10px;letter-spacing:3px;color:var(--teal);opacity:.55}
 
+    /* ===== صفوف نصية (اسم + سعر بدون صور) — للحلويات والأقسام اليومية ===== */
+    .list{display:grid;gap:10px;grid-template-columns:1fr}
+    @media(min-width:600px){.list{grid-template-columns:repeat(2,1fr);gap:12px}}
+    .row{
+      display:flex;align-items:baseline;gap:10px;
+      background:var(--surface);border:1.5px solid var(--line);border-radius:14px;
+      padding:14px 16px;box-shadow:var(--shadow-sm);
+      transition:transform .18s ease,box-shadow .18s ease;
+    }
+    .row:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+    .row .name{flex:0 1 auto}
+    .row .leader{flex:1 1 auto;min-width:18px;border-bottom:2px dotted var(--line);transform:translateY(-4px)}
+
     /* كارت الحالة الفاضية — للأقسام اليومية لما تكون لسه متحددتش */
     .empty-daily{
       background:var(--surface-2);border:1.5px dashed var(--line);border-radius:18px;
@@ -521,16 +534,6 @@
       "name_en": "Juices & More",
       "items": [
         {
-          "ar": "زبادي يوناني سادة",
-          "en": "Greek Yogurt Plain",
-          "price": 6
-        },
-        {
-          "ar": "زبادي يوناني بالنكهات",
-          "en": "Greek Yogurt Flavor",
-          "price": 8
-        },
-        {
           "ar": "عصير برتقال طازج",
           "en": "Fresh Orange",
           "price": 12
@@ -539,26 +542,6 @@
           "ar": "ليموناضة طازجة",
           "en": "Fresh Lemonade",
           "price": 12
-        },
-        {
-          "ar": "عصير رمان طازج",
-          "en": "Fresh Pomegrenate",
-          "price": 18
-        },
-        {
-          "ar": "عصير فراولة وموز طازج",
-          "en": "Fresh Strawberry Banana",
-          "price": 16
-        },
-        {
-          "ar": "عصير بطيخ طازج",
-          "en": "Fresh Watermelon",
-          "price": 12
-        },
-        {
-          "ar": "عصير أفوكادو طازج",
-          "en": "Fresh Avocado",
-          "price": 18
         }
       ]
     },
@@ -672,26 +655,6 @@
           "price": 5
         },
         {
-          "ar": "عصير تفاح كرتون",
-          "en": "Carton Apple Juice",
-          "price": 4
-        },
-        {
-          "ar": "عصير برتقال كرتون",
-          "en": "Carton Orange Juice",
-          "price": 4
-        },
-        {
-          "ar": "عصير مانجو كرتون",
-          "en": "Carton Mango Juice",
-          "price": 4
-        },
-        {
-          "ar": "عصير فواكه مشكلة كرتون",
-          "en": "Carton Mix Fruits Juice",
-          "price": 4
-        },
-        {
           "ar": "ريد بول",
           "en": "Red Bull",
           "price": 15
@@ -733,6 +696,35 @@
 
   /* تنسيق السعر (يحافظ على الكسر مثل 3.5) */
   const fmt = p => (Math.round(p * 100) / 100).toString();
+
+  /* أقسام تُعرض اسم + سعر فقط (صفوف بدون خانة صور) */
+  const TEXT_ONLY = ['Breakfast', 'Daily Dishes', 'Desserts'];
+
+  /* بناء صف نصي: الاسم — خط منقّط — السعر */
+  function buildRow(item){
+    const row = document.createElement('div');
+    row.className = 'row';
+
+    const name = document.createElement('span');
+    name.className = 'name';
+    name.dataset.ar = item.ar; name.dataset.en = item.en;
+    name.textContent = item.ar;
+
+    const leader = document.createElement('span');
+    leader.className = 'leader';
+
+    const price = document.createElement('span');
+    price.className = 'price';
+    price.style.borderTop = 'none'; price.style.paddingTop = '0'; price.style.marginTop = '0';
+    const pv = document.createElement('span');
+    pv.className = 'pv'; pv.textContent = fmt(item.price);
+    const cur = document.createElement('span');
+    cur.className = 'cur'; cur.dataset.ar = 'ريال'; cur.dataset.en = 'SAR'; cur.textContent = 'ريال';
+    price.appendChild(pv); price.appendChild(cur);
+
+    row.appendChild(name); row.appendChild(leader); row.appendChild(price);
+    return row;
+  }
 
   /* بناء كارت صنف */
   function buildCard(item){
@@ -807,10 +799,18 @@
       sec.appendChild(head);
 
       if (cat.items.length){
-        const grid = document.createElement('div');
-        grid.className = 'grid';
-        cat.items.forEach(item => grid.appendChild(buildCard(item)));
-        sec.appendChild(grid);
+        if (TEXT_ONLY.includes(cat.name_en)){
+          // قسم نصي: صفوف اسم + سعر بدون صور
+          const list = document.createElement('div');
+          list.className = 'list';
+          cat.items.forEach(item => list.appendChild(buildRow(item)));
+          sec.appendChild(list);
+        } else {
+          const grid = document.createElement('div');
+          grid.className = 'grid';
+          cat.items.forEach(item => grid.appendChild(buildCard(item)));
+          sec.appendChild(grid);
+        }
       } else {
         // قسم يومي لسه متحددش — كارت حالة فاضية بدل قسم فاضي
         const empty = document.createElement('div');

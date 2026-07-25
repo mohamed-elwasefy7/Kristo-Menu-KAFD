@@ -261,16 +261,6 @@
       "name_en": "Juices & More",
       "items": [
         {
-          "ar": "زبادي يوناني سادة",
-          "en": "Greek Yogurt Plain",
-          "price": 6
-        },
-        {
-          "ar": "زبادي يوناني بالنكهات",
-          "en": "Greek Yogurt Flavor",
-          "price": 8
-        },
-        {
           "ar": "عصير برتقال طازج",
           "en": "Fresh Orange",
           "price": 12
@@ -279,26 +269,6 @@
           "ar": "ليموناضة طازجة",
           "en": "Fresh Lemonade",
           "price": 12
-        },
-        {
-          "ar": "عصير رمان طازج",
-          "en": "Fresh Pomegrenate",
-          "price": 18
-        },
-        {
-          "ar": "عصير فراولة وموز طازج",
-          "en": "Fresh Strawberry Banana",
-          "price": 16
-        },
-        {
-          "ar": "عصير بطيخ طازج",
-          "en": "Fresh Watermelon",
-          "price": 12
-        },
-        {
-          "ar": "عصير أفوكادو طازج",
-          "en": "Fresh Avocado",
-          "price": 18
         }
       ]
     },
@@ -410,26 +380,6 @@
           "ar": "شاي مثلج ليمون لايت",
           "en": "Ice Tea Lemon Light",
           "price": 5
-        },
-        {
-          "ar": "عصير تفاح كرتون",
-          "en": "Carton Apple Juice",
-          "price": 4
-        },
-        {
-          "ar": "عصير برتقال كرتون",
-          "en": "Carton Orange Juice",
-          "price": 4
-        },
-        {
-          "ar": "عصير مانجو كرتون",
-          "en": "Carton Mango Juice",
-          "price": 4
-        },
-        {
-          "ar": "عصير فواكه مشكلة كرتون",
-          "en": "Carton Mix Fruits Juice",
-          "price": 4
         },
         {
           "ar": "ريد بول",
