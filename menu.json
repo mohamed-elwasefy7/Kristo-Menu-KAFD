@@ -106,7 +106,8 @@
         {
           "ar": "دجاج",
           "en": "Chicken",
-          "price": 18
+          "price": 18,
+          "image": "images/chicken-sandwich.jpg"
         },
         {
           "ar": "مكس أجبان",
@@ -116,7 +117,8 @@
         {
           "ar": "فيتا",
           "en": "Feta",
-          "price": 16
+          "price": 16,
+          "image": "images/feta-sandwich.jpg"
         },
         {
           "ar": "تونة",
