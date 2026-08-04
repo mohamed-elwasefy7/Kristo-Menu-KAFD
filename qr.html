@@ -78,9 +78,9 @@
     .card{
       width:var(--cw);height:var(--ch);position:relative;overflow:hidden;
       background:var(--logo-teal);color:var(--cream);text-align:center;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:calc(3mm * var(--k));
-      padding:calc(6mm * var(--k)) calc(5mm * var(--k));
+      display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+      gap:calc(2mm * var(--k));
+      padding:calc(2mm * var(--k)) calc(4mm * var(--k)) calc(4mm * var(--k));
       box-shadow:0 16px 44px rgba(35,78,73,.28);
     }
     .sheet.multi .card{box-shadow:none;outline:0.2mm dashed rgba(255,255,255,.6);outline-offset:-0.7mm}
@@ -94,8 +94,8 @@
     /* اللوجو — قناعين متعامدين (أفقي على الحاوية + رأسي على الصورة)
        عشان حواف الصورة تدوب في أرضية البطاقة من الأربع جهات بلا مستطيل ظاهر */
     .logo-wrap{
-      width:calc(74mm * var(--k));max-width:100%;
-      margin-top:calc(-4mm * var(--k));margin-bottom:calc(-4mm * var(--k));
+      width:calc(90mm * var(--k));max-width:100%;
+      margin-top:calc(-7mm * var(--k));margin-bottom:calc(-10mm * var(--k));
       -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
       mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
     }
@@ -110,14 +110,16 @@
       text-shadow:0 0.3mm 0.8mm rgba(0,0,0,.2);
     }
     .qrbox{
-      width:calc(54mm * var(--k));height:calc(54mm * var(--k));
-      background:#fff;border-radius:calc(3mm * var(--k));
-      padding:calc(2.6mm * var(--k));
+      width:calc(68mm * var(--k));height:calc(68mm * var(--k));
+      background:#fff;border-radius:calc(4mm * var(--k));
+      padding:calc(3.4mm * var(--k));
       box-shadow:0 1mm 3mm rgba(0,0,0,.22);
+      margin-top:calc(1mm * var(--k));
     }
     .qrbox svg{width:100%;height:100%;display:block}
-    .scan{display:flex;flex-direction:column;gap:calc(0.6mm * var(--k))}
-    .scan .ar{font-family:var(--font-disp);font-size:calc(5.4mm * var(--k));line-height:1.15}
+    /* النص السفلي مثبّت في آخر البطاقة عشان التوزيع يبقى متوازن */
+    .scan{display:flex;flex-direction:column;gap:calc(0.6mm * var(--k));margin-top:auto}
+    .scan .ar{font-family:var(--font-disp);font-size:calc(6mm * var(--k));line-height:1.15}
     .scan .en{
       font-family:var(--font-en);font-weight:600;
       font-size:calc(2.7mm * var(--k));letter-spacing:calc(0.5mm * var(--k));
