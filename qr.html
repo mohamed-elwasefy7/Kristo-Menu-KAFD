@@ -1,11 +1,13 @@
 <!doctype html>
 <!--
   ==========================================================================
-  كريستو / Cristo — بطاقة QR للطاولات (جاهزة للطباعة)
+  كريستو / KRISTO — بطاقة QR للطاولات (جاهزة للطباعة)
   نفس هوية المنيو: تركواز + أحمر عتيق + كريمي (Retro Levantine).
   مكتبة توليد الـQR مدمجة بالكامل (تشتغل offline).
-  • عدّل رابط المنيو من الخانة ثم اضغط "طباعة".
-  • الرابط الافتراضي placeholder — استبدله برابط الاستضافة الحقيقي بعد النشر.
+
+  المقاسات: A5 (148×210مم) · A6 (105×148مم) · A7 (74×105مم)
+  الثلاثة نفس النسبة (1:الجذر2) فالتصميم بيتحجّم بمعامل واحد بدون تشويه.
+  وضع "ورقة A4 كاملة" بيرصّ أكتر من بطاقة على ورقة واحدة مع خطوط قص.
   ==========================================================================
 -->
 <html lang="ar" dir="rtl">
@@ -19,100 +21,155 @@
   <link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700&family=DM+Sans:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
   <style>
     :root{
-      --ground:#F5E9D2; --ink:#22322F; --muted:#6E827C;
-      --teal:#2E6E67; --teal-2:#3C8B80; --teal-deep:#234E49;
-      --red:#D6392B; --mustard:#E0A63C; --cream:#F7EEDC; --line:#E7D6B4;
-      --font-disp:'Lalezar','Tajawal',sans-serif; --font-ar:'Tajawal',sans-serif; --font-en:'DM Sans',sans-serif;
+      --ink:#22322F; --muted:#6E827C; --teal:#2E6E67; --red:#D6392B;
+      --mustard:#E0A63C; --cream:#F7EEDC; --line:#E7D6B4; --logo-teal:#689997;
+      --font-ar:'Tajawal',sans-serif; --font-en:'DM Sans',sans-serif;
+      --font-disp:'Lalezar','Tajawal',sans-serif;
+      /* أبعاد البطاقة بالمليمتر + معامل التحجيم (A6 = 1) */
+      --cw:105mm; --ch:148mm; --k:1; --cols:1;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
-      font-family:var(--font-ar);background:var(--ground);color:var(--ink);
-      min-height:100vh;display:flex;flex-direction:column;align-items:center;gap:22px;padding:26px 16px 50px;
+      font-family:var(--font-ar);background:#EDE4D6;color:var(--ink);
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;
+      gap:22px;padding:26px 16px 50px;
     }
 
     /* ---------- أدوات التحكم (لا تُطبع) ---------- */
     .controls{
-      width:100%;max-width:430px;background:#FFFDF7;border:1.5px solid var(--line);border-radius:16px;
-      padding:16px;box-shadow:0 8px 24px rgba(35,78,73,.12);display:flex;flex-direction:column;gap:10px;
+      width:100%;max-width:460px;background:#FFFDF7;border:1.5px solid var(--line);
+      border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(35,78,73,.12);
+      display:flex;flex-direction:column;gap:12px;
     }
     .controls label{font-size:13px;font-weight:700;color:var(--teal)}
     .controls input{
       width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;
-      font-size:14px;font-family:var(--font-en);direction:ltr;text-align:left;color:var(--ink);background:#fff;
+      font-size:14px;font-family:var(--font-en);direction:ltr;text-align:left;
+      color:var(--ink);background:#fff;
     }
     .controls input:focus{outline:none;border-color:var(--teal)}
-    .btns{display:flex;gap:8px}
-    .controls button{
-      flex:1;padding:11px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;
-      font-family:var(--font-ar);transition:transform .1s,opacity .2s;
+    .seg{display:flex;gap:6px}
+    .seg button{
+      flex:1;padding:9px 4px;border-radius:10px;border:1.5px solid var(--line);
+      background:#fff;color:var(--ink);font-family:var(--font-ar);font-weight:700;
+      font-size:13px;cursor:pointer;line-height:1.35;
+      transition:background .18s,color .18s,border-color .18s;
     }
-    .controls button:active{transform:scale(.97)}
+    .seg button small{display:block;font-family:var(--font-en);font-weight:500;font-size:10px;opacity:.65}
+    .seg button.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+    .seg button.on small{opacity:.85}
+    .btns{display:flex;gap:8px}
+    .btns button{
+      flex:1;padding:11px;border-radius:10px;font-size:14px;font-weight:700;
+      cursor:pointer;font-family:var(--font-ar);transition:transform .1s;
+    }
+    .btns button:active{transform:scale(.97)}
     #gen{background:#fff;color:var(--teal);border:1.5px solid var(--teal)}
     #print{background:var(--red);color:#fff;border:1.5px solid var(--red)}
     .hint{font-size:12px;color:var(--muted);line-height:1.7}
+    .row-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:-4px}
 
-    /* ---------- البطاقة القابلة للطباعة ---------- */
-    /* أرضية البطاقة = لون حافة صورة اللوجو (#689997) فيدوب فيها */
+    /* ---------- ورقة الطباعة ---------- */
+    .sheet{display:grid;gap:0;justify-content:center}
+    .sheet.single{grid-template-columns:var(--cw)}
+    .sheet.multi{grid-template-columns:repeat(var(--cols),var(--cw))}
+
+    /* ---------- البطاقة ---------- */
     .card{
-      width:340px;max-width:100%;position:relative;overflow:hidden;
-      background:#689997;
-      color:var(--cream);border-radius:26px;padding:20px 24px 30px;text-align:center;
-      box-shadow:0 16px 44px rgba(35,78,73,.30);
-      display:flex;flex-direction:column;align-items:center;gap:12px;
+      width:var(--cw);height:var(--ch);position:relative;overflow:hidden;
+      background:var(--logo-teal);color:var(--cream);text-align:center;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:calc(3mm * var(--k));
+      padding:calc(6mm * var(--k)) calc(5mm * var(--k));
+      box-shadow:0 16px 44px rgba(35,78,73,.28);
     }
-    /* حُبيبات ورقية */
-    .card::before{content:"";position:absolute;inset:0;opacity:.10;mix-blend-mode:overlay;pointer-events:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+    .sheet.multi .card{box-shadow:none;outline:0.2mm dashed rgba(255,255,255,.6);outline-offset:-0.7mm}
+    /* حُبيبات ورقية (نفس ملمس خلفية اللوجو) */
+    .card::before{
+      content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
     .card > *{position:relative;z-index:1}
 
-    /* اللوجو الحقيقي — full-bleed لعرض البطاقة، نسيجه نفسه راس البطاقة، وتدويب سفلي فقط */
-    .logo-img{
-      display:block;width:calc(100% + 48px);max-width:none;
-      margin:-20px -24px -10px;
-      -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 100%);
-      mask-image:linear-gradient(180deg,#000 72%,transparent 100%);
+    /* اللوجو — قناعين متعامدين (أفقي على الحاوية + رأسي على الصورة)
+       عشان حواف الصورة تدوب في أرضية البطاقة من الأربع جهات بلا مستطيل ظاهر */
+    .logo-wrap{
+      width:calc(74mm * var(--k));max-width:100%;
+      margin-top:calc(-4mm * var(--k));margin-bottom:calc(-4mm * var(--k));
+      -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
+      mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
     }
-    .branch-line{font-family:var(--font-ar);font-weight:700;font-size:14px;color:#F3ECDC;text-shadow:0 1px 3px rgba(0,0,0,.18);margin-top:-4px}
-
-    .qrbox{width:236px;height:236px;background:#fff;border-radius:16px;padding:14px;box-shadow:0 6px 16px rgba(0,0,0,.22)}
+    .logo-img{
+      display:block;width:100%;
+      -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 88%,transparent 100%);
+      mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 88%,transparent 100%);
+    }
+    .branch-line{
+      font-family:var(--font-ar);font-weight:700;
+      font-size:calc(3.4mm * var(--k));color:#F3ECDC;
+      text-shadow:0 0.3mm 0.8mm rgba(0,0,0,.2);
+    }
+    .qrbox{
+      width:calc(54mm * var(--k));height:calc(54mm * var(--k));
+      background:#fff;border-radius:calc(3mm * var(--k));
+      padding:calc(2.6mm * var(--k));
+      box-shadow:0 1mm 3mm rgba(0,0,0,.22);
+    }
     .qrbox svg{width:100%;height:100%;display:block}
-
-    .scan{display:flex;flex-direction:column;gap:2px;margin-top:2px}
-    .scan .ar{font-family:var(--font-disp);font-size:22px}
-    .scan .en{font-family:var(--font-en);font-weight:600;font-size:12px;letter-spacing:2px;color:var(--mustard);text-transform:uppercase}
+    .scan{display:flex;flex-direction:column;gap:calc(0.6mm * var(--k))}
+    .scan .ar{font-family:var(--font-disp);font-size:calc(5.4mm * var(--k));line-height:1.15}
+    .scan .en{
+      font-family:var(--font-en);font-weight:600;
+      font-size:calc(2.7mm * var(--k));letter-spacing:calc(0.5mm * var(--k));
+      color:var(--mustard);text-transform:uppercase;
+    }
 
     /* ---------- الطباعة ---------- */
     @media print{
-      @page{margin:14mm}
-      body{background:#fff;padding:0;min-height:auto;display:block}
+      body{background:#fff;padding:0;min-height:auto;display:block;gap:0}
       .no-print{display:none!important}
-      .card{margin:0 auto;box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      .sheet{margin:0 auto}
+      .card{
+        box-shadow:none;
+        -webkit-print-color-adjust:exact;print-color-adjust:exact;
+        break-inside:avoid;page-break-inside:avoid;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- أدوات التحكم — لا تظهر عند الطباعة -->
   <div class="controls no-print">
     <label for="url">رابط المنيو / Menu URL</label>
     <input id="url" type="text" value="https://mohamed-elwasefy7.github.io/Kristo-Menu-KAFD/" spellcheck="false">
-    <div class="btns">
-      <button id="gen">تحديث الكود / Update</button>
-      <button id="print">🖨 طباعة / Print</button>
+
+    <div class="row-label">المقاس / Size</div>
+    <div class="seg" id="sizeSeg">
+      <button type="button" data-size="a5">A5<small>148&times;210mm</small></button>
+      <button type="button" data-size="a6" class="on">A6<small>105&times;148mm</small></button>
+      <button type="button" data-size="a7">A7<small>74&times;105mm</small></button>
     </div>
-    <p class="hint">بعد رفع المنيو على الإنترنت، الصق الرابط الحقيقي هنا واضغط «تحديث» ثم «طباعة».<br>After publishing, paste the real link, press Update, then Print.</p>
+
+    <div class="row-label">الطباعة / Print</div>
+    <div class="seg" id="modeSeg">
+      <button type="button" data-mode="single" class="on">بطاقة واحدة<small>card per page</small></button>
+      <button type="button" data-mode="sheet">ورقة A4 كاملة<small>multi-up + cut lines</small></button>
+    </div>
+
+    <div class="btns">
+      <button type="button" id="gen">تحديث الكود / Update</button>
+      <button type="button" id="print">&#128424; طباعة / Print</button>
+    </div>
+    <p class="hint" id="hint"></p>
   </div>
 
-  <!-- البطاقة القابلة للطباعة -->
-  <div class="card" id="card">
-    <img class="logo-img" src="images/logo.jpg" alt="كريستو KRISTO — Lebanese cuisine" decoding="async">
-    <div class="branch-line">فرع كافد · KAFD Branch</div>
-    <div class="qrbox" id="qrbox"></div>
-    <div class="scan">
-      <span class="ar">امسح لعرض المنيو</span>
-      <span class="en">Scan for Menu</span>
-    </div>
-  </div>
+  <!-- ورقة الطباعة (بطاقة أو أكتر) -->
+  <div class="sheet single" id="sheet"></div>
+
+  <!-- ستايل مقاس الصفحة — بيتكتب بالـJS -->
+  <style id="pagestyle">@page{size:105mm 148mm;margin:0}</style>
 
   <!-- مكتبة توليد الـQR (qrcode-generator, MIT) — مدمجة بالكامل -->
   <script>//---------------------------------------------------------------------
@@ -2415,23 +2472,138 @@ var qrcode = function() {
 </script>
 
   <script>
-    /* توليد الـQR من الرابط كـSVG قابل للتكبير (مثالي للطباعة) */
-    function render(){
-      var url = document.getElementById('url').value.trim() || 'https://mohamed-elwasefy7.github.io/Kristo-Menu-KAFD/';
-      var qr = qrcode(0, 'M');
-      qr.addData(url); qr.make();
-      var box = document.getElementById('qrbox');
-      box.innerHTML = qr.createSvgTag(8, 0);
-      var svg = box.querySelector('svg');
-      var w = parseInt(svg.getAttribute('width'), 10);      // إزالة وحدة px
-      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + w);
-      svg.removeAttribute('width'); svg.removeAttribute('height');
-      svg.setAttribute('shape-rendering', 'crispEdges');
+    /* ===== مقاسات البطاقة (مم) — الثلاثة بنسبة 1:الجذر2 فبيتحجّموا بمعامل k ===== */
+    var SIZES = {
+      a5: { w:148, h:210, k:148/105 },
+      a6: { w:105, h:148, k:1 },
+      a7: { w:74,  h:105, k:74/105 }
+    };
+    /* وضع "ورقة A4 كاملة" — الأرقام دي بتملأ الـA4 بالظبط بهامش صفر:
+       A6: 2×2 = 210×296مم (A4 طولي)   |   A7: 4×2 = 296×210مم (A4 عرضي)
+       A5: بطاقة واحدة بتملأ الورقة أصلاً، فوضع الورقة مالوش لازمة. */
+    var SHEET = {
+      a6: { n:4, cols:2, page:'A4' },
+      a7: { n:8, cols:4, page:'A4 landscape' }
+    };
+
+    var state = { size:'a6', mode:'single' };
+
+    /* يقبل المقاس والوضع من الرابط: qr.html?size=a5&mode=sheet
+       (مستخدَم كمان في توليد ملفات PDF الجاهزة للطباعة) */
+    (function readParams(){
+      var q = new URLSearchParams(location.search);
+      var s = (q.get('size') || '').toLowerCase();
+      var m = (q.get('mode') || '').toLowerCase();
+      if (SIZES[s]) state.size = s;
+      if (m === 'single' || m === 'sheet') state.mode = m;
+    })();
+
+    /* ===== بناء بطاقة واحدة ===== */
+    function cardHTML(){
+      return '<div class="card">'
+        + '<div class="logo-wrap"><img class="logo-img" src="images/logo.jpg" alt="كريستو KRISTO — Lebanese cuisine" decoding="async"></div>'
+        + '<div class="branch-line">فرع كافد &middot; KAFD Branch</div>'
+        + '<div class="qrbox"></div>'
+        + '<div class="scan">'
+        +   '<span class="ar">امسح لعرض المنيو</span>'
+        +   '<span class="en">Scan for Menu</span>'
+        + '</div>'
+        + '</div>';
     }
-    document.getElementById('gen').addEventListener('click', render);
-    document.getElementById('print').addEventListener('click', function(){ render(); window.print(); });
-    document.getElementById('url').addEventListener('keydown', function(e){ if(e.key === 'Enter') render(); });
-    render();
+
+    /* ===== توليد الـQR كـSVG قابل للتحجيم (مثالي للطباعة) ===== */
+    function drawQR(){
+      var url = document.getElementById('url').value.trim()
+             || 'https://mohamed-elwasefy7.github.io/Kristo-Menu-KAFD/';
+      var qr = qrcode(0, 'M');
+      qr.addData(url);
+      qr.make();
+      var svg = qr.createSvgTag(8, 0);
+      var boxes = document.querySelectorAll('.qrbox');
+      for (var i = 0; i < boxes.length; i++){
+        boxes[i].innerHTML = svg;
+        var el = boxes[i].querySelector('svg');
+        var w = parseInt(el.getAttribute('width'), 10);   // إزالة وحدة px
+        el.setAttribute('viewBox', '0 0 ' + w + ' ' + w);
+        el.removeAttribute('width');
+        el.removeAttribute('height');
+        el.setAttribute('shape-rendering', 'crispEdges');
+      }
+    }
+
+    /* ===== تطبيق المقاس + وضع الطباعة ===== */
+    function apply(){
+      var s = SIZES[state.size];
+      var sh = SHEET[state.size];
+      var isSheet = (state.mode === 'sheet') && !!sh;   // A5 مالهاش وضع ورقة
+      var root = document.documentElement.style;
+
+      root.setProperty('--cw', s.w + 'mm');
+      root.setProperty('--ch', s.h + 'mm');
+      root.setProperty('--k',  s.k);
+      root.setProperty('--cols', isSheet ? sh.cols : 1);
+
+      var sheet = document.getElementById('sheet');
+      sheet.className = 'sheet ' + (isSheet ? 'multi' : 'single');
+
+      var n = isSheet ? sh.n : 1;
+      var html = '';
+      for (var i = 0; i < n; i++) html += cardHTML();
+      sheet.innerHTML = html;
+
+      /* مقاس صفحة الطباعة: مقاس البطاقة بالظبط، أو A4 (بهامش صفر) لوضع الورقة */
+      document.getElementById('pagestyle').textContent = isSheet
+        ? '@page{size:' + sh.page + ';margin:0}'
+        : '@page{size:' + s.w + 'mm ' + s.h + 'mm;margin:0}';
+
+      var S = state.size.toUpperCase();
+      var sheetBtn = document.querySelector('#modeSeg [data-mode="sheet"]');
+      sheetBtn.disabled = !sh;
+      sheetBtn.style.opacity = sh ? '' : '.4';
+
+      document.getElementById('hint').innerHTML = isSheet
+        ? 'هتطبع <b>' + n + '</b> بطاقة ' + S + ' على ورقة A4 واحدة'
+          + (sh.page.indexOf('landscape') > -1 ? ' <b>عرضي</b>' : ' طولي')
+          + ' — الخطوط المتقطّعة دليل القص.<br>'
+          + n + ' &times; ' + S + ' per A4 sheet, dashed lines are cut guides.'
+        : 'هتطبع بطاقة واحدة ' + S + ' (' + s.w + '&times;' + s.h + ' مم). في نافذة الطباعة: '
+          + 'اختار نفس مقاس الورق، الهوامش «بدون»، وفعّل «طباعة الخلفيات».<br>'
+          + 'One ' + S + ' card — set paper to ' + S + ', margins none, background graphics on.'
+          + (sh ? '' : '<br><b>ملاحظة:</b> A5 بتملأ ورقة A4 لوحدها، فمفيش وضع «ورقة كاملة» ليها.');
+
+      drawQR();
+    }
+
+    /* ===== ربط الأزرار ===== */
+    function bindSeg(id, key){
+      document.getElementById(id).addEventListener('click', function(e){
+        var b = e.target.closest('button');
+        if (!b) return;
+        state[key] = b.getAttribute('data-size') || b.getAttribute('data-mode');
+        var all = this.querySelectorAll('button');
+        for (var i = 0; i < all.length; i++) all[i].classList.remove('on');
+        b.classList.add('on');
+        apply();
+      });
+    }
+    bindSeg('sizeSeg', 'size');
+    bindSeg('modeSeg', 'mode');
+
+    /* تمييز الأزرار حسب الحالة الابتدائية (لو جت من الرابط) */
+    (function syncSeg(){
+      document.querySelectorAll('#sizeSeg button').forEach(function(b){
+        b.classList.toggle('on', b.getAttribute('data-size') === state.size);
+      });
+      document.querySelectorAll('#modeSeg button').forEach(function(b){
+        b.classList.toggle('on', b.getAttribute('data-mode') === state.mode);
+      });
+    })();
+
+    document.getElementById('gen').addEventListener('click', drawQR);
+    document.getElementById('print').addEventListener('click', function(){ drawQR(); window.print(); });
+    document.getElementById('url').addEventListener('keydown', function(e){ if (e.key === 'Enter') drawQR(); });
+
+    apply();
   </script>
 </body>
 </html>
